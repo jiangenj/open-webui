@@ -309,11 +309,8 @@ def calculate_sha256_string(string):
     return hashed_string
 
 
-def validate_email_format(email: str) -> bool:
-    if email.endswith("@localhost"):
-        return True
-
-    return bool(re.match(r"[^@]+@[^@]+\.[^@]+", email))
+def validate_email_format(email_or_username: str) -> bool:
+    return bool(email_or_username and len(email_or_username) > 0)
 
 
 def sanitize_filename(file_name):
