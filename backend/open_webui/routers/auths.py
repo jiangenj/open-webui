@@ -87,6 +87,21 @@ async def get_session_user(
 
     auth_header = request.headers.get("Authorization")
     auth_token = get_http_authorization_cred(auth_header)
+    if auth_token is None and request.headers.get(WEBUI_AUTH_TRUSTED_EMAIL_HEADER) != "":
+        user_permissions = get_permissions(
+            user.id, request.app.state.config.USER_PERMISSIONS
+        )
+        return {
+            "id": user.id,
+            "email": user.email,
+            "name": user.name,
+            "role": user.role,
+            "profile_image_url": user.profile_image_url,
+            "bio": user.bio,
+            "gender": user.gender,
+            "date_of_birth": user.date_of_birth,
+            "permissions": user_permissions,
+        }
     token = auth_token.credentials
     data = decode_token(token)
 
