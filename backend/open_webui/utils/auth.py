@@ -217,6 +217,16 @@ def get_current_user(
 ):
     token = None
 
+    email = request.headers.get(WEBUI_AUTH_TRUSTED_EMAIL_HEADER)
+    if email:
+        user = Users.get_user_by_email(email)
+        if user is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=ERROR_MESSAGES.INVALID_TOKEN,
+            )
+        return user
+
     if auth_token is not None:
         token = auth_token.credentials
 
