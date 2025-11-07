@@ -92,6 +92,9 @@ async def get_session_user(
             user.id, request.app.state.config.USER_PERMISSIONS
         )
         return {
+            "token": token,
+            "token_type": "Bearer",
+            "expires_at": None,
             "id": user.id,
             "email": user.email,
             "name": user.name,
