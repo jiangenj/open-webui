@@ -1,3 +1,4 @@
+from builtins import len
 import re
 import uuid
 import time
@@ -87,7 +88,16 @@ async def get_session_user(
 
     auth_header = request.headers.get("Authorization")
     auth_token = get_http_authorization_cred(auth_header)
-    token = auth_token.credentials
+    token = None
+    if auth_token:
+        token = auth_token.credentials
+    if token is None:
+        cookies = request.headers.get("Cookie")
+        for cookie in cookies.split(";"):
+            cookie = cookie.strip()
+            if cookie.startswith("token="):
+                token = cookie[len("token="):]
+                break
     data = decode_token(token)
 
     expires_at = None
